@@ -27,7 +27,7 @@ impl Chip {
         }
     }
 
-    pub fn fetch(mut self) -> u16 {
+    pub fn fetch(&mut self) -> u16 {
         let mut instruction: u16 = self.mem[self.pc as usize] as u16;
         instruction = instruction << 8;
         instruction |= self.mem[(self.pc + 1) as usize] as u16;
