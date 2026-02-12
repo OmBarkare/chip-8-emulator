@@ -11,6 +11,22 @@ struct Chip {
     display: [bool; 64*32], //pixels either on or off
 }
 
+impl Chip {
+    pub fn init() -> Self {
+        Chip {
+            mem: [0; 4096],
+            rv: [0; 16],
+            ri: 0,
+            dt: 0,
+            st: 0,
+            pc: 0,
+            sp: 0,
+            stack: [0; 16],
+            keyboard: [false; 16],
+            display: [false; 64*32],
+        }
+    } 
+}
 
 
 fn main() {
