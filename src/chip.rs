@@ -14,7 +14,7 @@ pub struct Chip {
     pub display: [bool; 64*32], //pixels either on or off
     rand_seed: u32,
 }
-const hex_sprites: [u8; 80] = [
+const HEX_SPRITES: [u8; 80] = [
         0xF0,0x90,0x90,0x90,0xF0,
         0x20,0x60,0x20,0x20,0x70,
         0xF0,0x10,0xF0,0x80,0xF0,
@@ -52,7 +52,7 @@ impl Chip {
             },
         };
         let mut i = 0x22;
-        for l in hex_sprites {
+        for l in HEX_SPRITES {
             chip.mem[i] = l;
             i += 1;
         }
@@ -329,7 +329,7 @@ impl Chip {
             }
 
             default => {
-
+                
             }
         }
 
