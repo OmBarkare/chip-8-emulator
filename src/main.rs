@@ -17,6 +17,17 @@ fn main() {
             ..WindowOptions::default()
         }
     ).unwrap();
+
+    let program: [u8; 10] = [
+        0x60, 0x00, // LD V0, 0
+        0x61, 0x00, // LD V1, 0
+        0xA0, 0x27, // LD I, 0x22 (Address of your Font '0')
+        0xD0, 0x15, // DRW V0, V1, 5 bytes
+        0x12, 0x08, // JUMP to 0x208 (Infinite loop)
+    ];
+
+    chip.load_program(&program);
+
     while(true) {
         chip.cycle();
         let mut i = 0;
@@ -36,18 +47,4 @@ fn main() {
 fn from_u8_rgb(r: u8, g: u8, b: u8) -> u32 {
     let (r, g, b) = (r as u32, g as u32, b as u32);
     (r << 16) | (g << 8) | b
-}
-
-fn draw(chip: &Chip) {
-    print!("\x1B[2J\x1B[1;1H");
-    for i in 0..64*32 {
-        if i%64 == 0 {
-            println!("");
-        }
-        if chip.display[i] {
-            print!("*");
-        } else {
-            print!(" ");
-        }
-    }
 }
