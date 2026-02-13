@@ -1,14 +1,35 @@
 mod chip;
 
-use minifb::{Window, WindowOptions};
+use minifb::{Scale, Window, WindowOptions};
 use chip::Chip;
 
 
 fn main() {
     let mut chip = Chip::init();
+    let mut buffer: [u32; 64*32] = [0; 64*32];
+    let mut window = Window::new(
+        "chip-8", 
+        64,
+        32,
+        WindowOptions {
+            scale: Scale::X16,
+            resize: false,
+            ..WindowOptions::default()
+        }
+    ).unwrap();
     while(true) {
         chip.cycle();
-        draw(&chip);
+        let mut i = 0;
+        for pix_on in chip.display {
+            if pix_on {
+                buffer[i] = from_u8_rgb(255, 255, 255);                
+            } else {
+                buffer[i] = from_u8_rgb(0, 0, 0);
+            }
+            i += 1;
+        }
+        
+        window.update_with_buffer(&buffer, 64, 32).unwrap();
     }
 }
 
