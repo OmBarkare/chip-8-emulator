@@ -74,6 +74,13 @@ impl Chip {
         (self.rand_seed >> 24) as u8
     }
 
+    pub fn load_program(&mut self, program: &[u8]) {
+        for (i, inst) in program.iter().enumerate() {
+            self.mem[0x200 + i] = *inst;
+        }
+    }
+
+
     pub fn cycle(&mut self) {
         let opcode = self.fetch();
 
