@@ -107,12 +107,12 @@ impl Chip {
             }
 
             (0x1, _, _, _) => {
-                // JP addr jump pc to address nnn
+                // JP nnn jump pc to address nnn
                 self.pc = nnn;
             }
 
             (0x2, _, _, _) => {
-                // CALL addr call subroutine at nnn
+                // CALL nnn call subroutine at nnn
                 self.sp += 1;
                 self.stack[self.sp as usize] = self.pc;
                 self.pc = nnn;
@@ -324,7 +324,7 @@ impl Chip {
             }
 
             (0xF, _, 0x1, 0x5) => {
-                // LD DT, Vx load dt into Vx
+                // LD DT, Vx load Vx into dt
                 self.dt = self.rv[x as usize];
             }
 

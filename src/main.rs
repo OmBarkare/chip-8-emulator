@@ -1,7 +1,6 @@
 mod chip;
 
-use std::{fs::File, io::Read};
-
+use std::{fs::File, io::Read, time::{Duration, Instant}};
 use chip::Chip;
 use minifb::{Key, Scale, Window, WindowOptions};
 
@@ -20,12 +19,14 @@ fn main() {
     )
     .unwrap();
 
-    let mut program_file = File::open("dttest.ch8").unwrap();
+    let mut program_file = File::open("tetris.ch8").unwrap();
     let mut program = Vec::new();
     program_file.read_to_end(&mut program).unwrap();
 
     chip.load_program(&program);
 
+    let mut last_instant = Instant::now();
+    let mut execs = 0;
     loop {
         chip.cycle();
 
@@ -41,7 +42,7 @@ fn main() {
         }
 
         chip.keyboard = [false; 16];
-        for key in window.get_keys_pressed(minifb::KeyRepeat::No) {
+        for key in window.get_keys() {
             match key {
                 Key::Key1 => chip.keyboard[0] = true,
                 Key::Key2 => chip.keyboard[1] = true,
@@ -61,9 +62,16 @@ fn main() {
                 Key::V => chip.keyboard[15] = true,
                 _default => {}
             }
+
+            chip.tick_timers();
         }
-        chip.tick_timers();
         window.update_with_buffer(&buffer, 64, 32).unwrap();
+        execs += 1;
+        if last_instant.elapsed() > Duration::from_secs(1) {
+            println!("execs per sec: {}",execs);
+            last_instant = Instant::now();
+            execs = 0;
+        }
     }
 }
 
