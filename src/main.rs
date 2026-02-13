@@ -1,6 +1,8 @@
 mod chip;
 
-use minifb::{Scale, Window, WindowOptions};
+use std::default;
+
+use minifb::{Key, Scale, Window, WindowOptions};
 use chip::Chip;
 
 
@@ -28,9 +30,13 @@ fn main() {
 
     chip.load_program(&program);
 
+
     while(true) {
+
         chip.cycle();
+
         let mut i = 0;
+
         for pix_on in chip.display {
             if pix_on {
                 buffer[i] = from_u8_rgb(255, 255, 255);                
@@ -40,7 +46,30 @@ fn main() {
             i += 1;
         }
         
+        for key in window.get_keys_pressed(minifb::KeyRepeat::No) {
+            match key {
+                Key::Key1 => chip.keyboard[0] = true,
+                Key::Key2 => chip.keyboard[1] = true,
+                Key::Key3 => chip.keyboard[2] = true,
+                Key::Key4=> chip.keyboard[3] = true,
+                Key::Q => chip.keyboard[4] = true,
+                Key::W => chip.keyboard[5] = true,
+                Key::E => chip.keyboard[6] = true,
+                Key::R => chip.keyboard[7] = true,
+                Key::A => chip.keyboard[8] = true,
+                Key::S => chip.keyboard[9] = true,
+                Key::D => chip.keyboard[10] = true,
+                Key::F => chip.keyboard[11] = true,
+                Key::Z => chip.keyboard[12] = true,
+                Key::X => chip.keyboard[13] = true,
+                Key::C => chip.keyboard[14] = true,
+                Key::V => chip.keyboard[15] = true,
+                _default=> {}
+            }
+        }
+
         window.update_with_buffer(&buffer, 64, 32).unwrap();
+
     }
 }
 

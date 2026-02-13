@@ -10,7 +10,7 @@ pub struct Chip {
     pc: u16, //program counter
     sp: u8, //stack pointer
     stack: [u16; 16],
-    keyboard: [bool; 16], //16 keys, either pressed or not pressed
+    pub keyboard: [bool; 16], //16 keys, either pressed or not pressed
     pub display: [bool; 64*32], //pixels either on or off
     rand_seed: u32,
 }
