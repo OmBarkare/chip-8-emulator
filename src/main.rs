@@ -227,7 +227,75 @@ impl Chip {
                 }
             }
 
-            
+            (0xE, _, 0x9, 0xE) => { // SKP Vx, skip if key with value of Vx is pressed
+                if self.keyboard[self.rv[x as usize] as usize] {
+                    self.pc += 2;
+                }
+            }
+
+            (0xE, _, 0xA, 0x1) => { // SKNP Vx, skip if key with value of Vx is not pressed
+                if !self.keyboard[self.rv[x as usize] as usize] {
+                    self.pc += 2;
+                }
+            }
+
+            (0xF, _, 0x0, 0x7) => { // LD Vx, DT load dt into Vx
+                self.rv[x as usize] = self.dt;
+            }
+
+            (0xF, _, 0x0, 0xA) => { // LD Vx, K wait for keypress, load that value into Vx
+                let mut key_pressed = false;
+
+                for i in 0..16 {
+                    if self.keyboard[i] {
+                        key_pressed = true;
+                        self.rv[x as usize] = i as u8;
+                        break;
+                    }
+                }
+
+                if !key_pressed {
+                    self.pc -= 2;
+                }
+            }
+
+            (0xF, _, 0x1, 0x5) => { // LD DT, Vx load dt into Vx
+                self.dt = self.rv[x as usize];
+            }
+
+            (0xF, _, 0x1, 0x8) => { // LD Vx, ST load st into Vx
+                self.st = self.rv[x as usize];
+            }
+
+            (0xF, _, 0x1, 0xE) => { // ADD I, Vx, add I = I + Vx
+                self.ri = self.ri + self.rv[x as usize] as u16;
+            }
+
+            (0xF, _, 0x2, 0x9) => { // set I = location of sprite for digit in Vx
+                todo!()
+            }
+
+            (0xF, _, 0x3, 0x3) => { // set I = location of sprite for digit in Vx
+                let mut num = self.rv[x as usize];
+                self.mem[self.ri as usize + 2] = num % 10;
+                num /= 10;
+                self.mem[self.ri as usize + 1] = num % 10;
+                num /= 10;
+                self.mem[self.ri as usize] = num % 10;
+            }
+
+            (0xF, _, 0x5, 0x5) => {
+                for i in 0..=x {
+                    self.mem[(self.ri + i) as usize] = self.rv[i as usize];
+                }
+            }
+
+            (0xF, _, 0x6, 0x5) => {
+                for i in 0..=x {
+                    self.rv[i as usize] = self.mem[(self.ri + i) as usize];
+                }
+            }
+
             default => {
 
             }
