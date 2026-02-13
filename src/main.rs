@@ -1,57 +1,52 @@
 mod chip;
 
-use std::default;
+use std::{fs::File, io::Read};
 
-use minifb::{Key, Scale, Window, WindowOptions};
 use chip::Chip;
-
+use minifb::{Key, Scale, Window, WindowOptions};
 
 fn main() {
     let mut chip = Chip::init();
-    let mut buffer: [u32; 64*32] = [0; 64*32];
+    let mut buffer: [u32; 64 * 32] = [0; 64 * 32];
     let mut window = Window::new(
-        "chip-8", 
+        "chip-8",
         64,
         32,
         WindowOptions {
             scale: Scale::X16,
             resize: false,
             ..WindowOptions::default()
-        }
-    ).unwrap();
+        },
+    )
+    .unwrap();
 
-    let program: [u8; 10] = [
-        0x60, 0x00, // LD V0, 0
-        0x61, 0x00, // LD V1, 0
-        0xA0, 0x27, // LD I, 0x22 (Address of your Font '0')
-        0xD0, 0x15, // DRW V0, V1, 5 bytes
-        0x12, 0x08, // JUMP to 0x208 (Infinite loop)
-    ];
+    let mut program_file = File::open("dttest.ch8").unwrap();
+    let mut program = Vec::new();
+    program_file.read_to_end(&mut program).unwrap();
 
     chip.load_program(&program);
 
-
-    while(true) {
-
+    loop {
         chip.cycle();
 
         let mut i = 0;
 
         for pix_on in chip.display {
             if pix_on {
-                buffer[i] = from_u8_rgb(255, 255, 255);                
+                buffer[i] = from_u8_rgb(255, 255, 255);
             } else {
                 buffer[i] = from_u8_rgb(0, 0, 0);
             }
             i += 1;
         }
-        
+
+        chip.keyboard = [false; 16];
         for key in window.get_keys_pressed(minifb::KeyRepeat::No) {
             match key {
                 Key::Key1 => chip.keyboard[0] = true,
                 Key::Key2 => chip.keyboard[1] = true,
                 Key::Key3 => chip.keyboard[2] = true,
-                Key::Key4=> chip.keyboard[3] = true,
+                Key::Key4 => chip.keyboard[3] = true,
                 Key::Q => chip.keyboard[4] = true,
                 Key::W => chip.keyboard[5] = true,
                 Key::E => chip.keyboard[6] = true,
@@ -64,12 +59,11 @@ fn main() {
                 Key::X => chip.keyboard[13] = true,
                 Key::C => chip.keyboard[14] = true,
                 Key::V => chip.keyboard[15] = true,
-                _default=> {}
+                _default => {}
             }
         }
-
+        chip.tick_timers();
         window.update_with_buffer(&buffer, 64, 32).unwrap();
-
     }
 }
 
