@@ -40,7 +40,7 @@ impl Chip {
             ri: 0,
             dt: 0,
             st: 0,
-            pc: 0,
+            pc: 0x200,
             sp: 0,
             stack: [0; 16],
             keyboard: [false; 16],
