@@ -1,8 +1,12 @@
 mod chip;
 
-use std::{fs::File, io::Read, time::{Duration, Instant}};
 use chip::Chip;
 use minifb::{Key, Scale, Window, WindowOptions};
+use std::{
+    fs::File,
+    io::Read,
+    time::{Duration, Instant},
+};
 
 fn main() {
     let mut chip = Chip::init();
@@ -26,12 +30,19 @@ fn main() {
     chip.load_program(&program);
 
     let mut last_instant = Instant::now();
+    let mut last_time_since_updated: Instant = Instant::now();
     let mut execs = 0;
     loop {
         chip.cycle();
 
-        let mut i = 0;
+        // update timers
+        if last_time_since_updated.elapsed() > Duration::from_millis(16) {
+            chip.tick_timers();
+            last_time_since_updated = Instant::now();
+        }
 
+        //map display to window buffer
+        let mut i = 0;
         for pix_on in chip.display {
             if pix_on {
                 buffer[i] = from_u8_rgb(255, 255, 255);
@@ -39,6 +50,13 @@ fn main() {
                 buffer[i] = from_u8_rgb(0, 0, 0);
             }
             i += 1;
+        }
+
+        execs += 1;
+        if last_instant.elapsed() > Duration::from_secs(1) {
+            // println!("execs per sec: {}",execs);
+            last_instant = Instant::now();
+            execs = 0;
         }
 
         chip.keyboard = [false; 16];
@@ -62,16 +80,9 @@ fn main() {
                 Key::V => chip.keyboard[15] = true,
                 _default => {}
             }
-
-            chip.tick_timers();
         }
+        chip.tick_timers();
         window.update_with_buffer(&buffer, 64, 32).unwrap();
-        execs += 1;
-        if last_instant.elapsed() > Duration::from_secs(1) {
-            println!("execs per sec: {}",execs);
-            last_instant = Instant::now();
-            execs = 0;
-        }
     }
 }
 

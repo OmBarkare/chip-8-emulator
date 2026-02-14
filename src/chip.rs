@@ -261,6 +261,7 @@ impl Chip {
                 let vx = self.rv[x as usize] as usize;
                 let vy = self.rv[y as usize] as usize;
                 let sprite_hieght = n;
+                self.rv[0xF] = 0;
 
                 for h in 0..sprite_hieght {
                     // reads n bytes, one byte is one line
@@ -304,6 +305,7 @@ impl Chip {
             (0xF, _, 0x0, 0x7) => {
                 // LD Vx, DT load dt into Vx
                 self.rv[x as usize] = self.dt;
+                println!("dt: {}", self.dt);
             }
 
             (0xF, _, 0x0, 0xA) => {
@@ -326,6 +328,7 @@ impl Chip {
             (0xF, _, 0x1, 0x5) => {
                 // LD DT, Vx load Vx into dt
                 self.dt = self.rv[x as usize];
+                println!("dt: {}", self.dt);
             }
 
             (0xF, _, 0x1, 0x8) => {
