@@ -1,8 +1,12 @@
 # Chip-8 emulator
 a chip-8 emulator built to learn about instructions sets, and get a feel of computer architecture
 
-playing tetris:
-https://github.com/user-attachments/assets/c4878736-f20f-4f32-8a8d-4138cc275737
+playing tetris
+
+
+https://github.com/user-attachments/assets/9deaa63b-299d-47de-a657-5905df064f3e
+
+
 
 
 - sound is not implemented yet
