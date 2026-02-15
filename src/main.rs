@@ -3,9 +3,7 @@ mod chip;
 use chip::Chip;
 use minifb::{Key, Scale, Window, WindowOptions};
 use std::{
-    fs::File,
-    io::Read,
-    time::{Duration, Instant},
+    env::{self, args}, fs::File, io::Read, time::{Duration, Instant}
 };
 
 fn main() {
@@ -24,7 +22,12 @@ fn main() {
     )
     .unwrap();
 
-    let mut program_file = File::open("spaceinvaders.ch8").unwrap();
+    let args: Vec<_> = env::args().collect();
+    if args.len() < 2 {
+        println!("usage: {} <filename>", args[0]);
+    }
+    let filename = &args[1];
+    let mut program_file = File::open(filename).unwrap();
     let mut program = Vec::new();
     program_file.read_to_end(&mut program).unwrap();
 
