@@ -1,3 +1,5 @@
+
+https://github.com/user-attachments/assets/f6bcfb74-b98b-4dff-87e1-a048380eee94
 # Chip-8 emulator
 A Chip-8 emulator written to learn about instruction sets and computer architecture.
 
@@ -10,6 +12,11 @@ A Chip-8 emulator written to learn about instruction sets and computer architect
 Q W E R  <br>
 A S D F  <br>
 Z X C V  
+
+## Demo
+
+
+https://github.com/user-attachments/assets/021da6fc-ec75-481d-9b76-a6cd0db8b07f
 
 
 ## Not Implemented
