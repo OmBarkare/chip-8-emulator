@@ -134,7 +134,7 @@ impl Chip {
 
             (0x5, _, _, 0x0) => {
                 // SE Vx, Vy
-                if (self.rv[x as usize] != kk as u8) {
+                if (self.rv[x as usize] != self.rv[y as usize] as u8) {
                     self.pc += 2;
                 }
             }
@@ -171,14 +171,14 @@ impl Chip {
 
             (0x8, _, _, 0x4) => {
                 // ADD Vx, Vy  Vx = Vx + Vy, set VF = carry
-                let p = x as u16;
-                let q = y as u16;
-                if p + q > 255 {
+                let vx = self.rv[x as usize] as u16;
+                let vy = self.rv[y as usize] as u16;
+                if vx + vy > 255 {
                     self.rv[0xF] = 1;
                 } else {
                     self.rv[0xF] = 0;
                 }
-                self.rv[x as usize] = ((p + q) & 0x00FF) as u8;
+                self.rv[x as usize] = ((vx + vy) & 0x00FF) as u8;
             }
 
             (0x8, _, _, 0x5) => {
@@ -224,7 +224,7 @@ impl Chip {
             (0x8, _, _, 0xE) => {
                 // SHL Vx shilft left Vx, store MSb in VF
 
-                if (self.rv[x as usize] & 0x10) >> 7 == 1 {
+                if (self.rv[x as usize] & 0x80) >> 7 == 1 {
                     self.rv[0xF] = 1;
                 } else {
                     self.rv[0xF] = 0;

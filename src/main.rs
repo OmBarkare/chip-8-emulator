@@ -24,7 +24,7 @@ fn main() {
     )
     .unwrap();
 
-    let mut program_file = File::open("tetris.ch8").unwrap();
+    let mut program_file = File::open("spaceinvaders.ch8").unwrap();
     let mut program = Vec::new();
     program_file.read_to_end(&mut program).unwrap();
 
