@@ -34,8 +34,8 @@ fn main() {
     let mut last_time_since_updated_ticker = Instant::now();
     let mut last_time_since_cycle = Instant::now();
     loop {
-
-        if last_time_since_cycle.elapsed() > Duration::from_nanos(2_000_000) { //execute at 500hz
+        if last_time_since_cycle.elapsed() > Duration::from_nanos(2_000_000) {
+            //execute at 500hz
 
             chip.cycle();
 
@@ -74,9 +74,9 @@ fn main() {
             last_time_since_cycle = Instant::now();
         }
 
-        // update timers
-        if last_time_since_updated_ticker.elapsed() > Duration::from_nanos(16_666_666) { //keep screen refresh rate at 60hz
-            chip.tick_timers();
+        if last_time_since_updated_ticker.elapsed() > Duration::from_nanos(16_666_666) {
+            //keep screen refresh rate at 60hz
+            chip.tick_timers(); // update timers
             window.update_with_buffer(&buffer, 64, 32).unwrap();
             last_time_since_updated_ticker = Instant::now();
         }
@@ -87,7 +87,6 @@ fn main() {
         //     last_instant_exec = Instant::now();
         //     execs = 0;
         // }
-
     }
 }
 
