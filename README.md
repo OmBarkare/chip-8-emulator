@@ -6,12 +6,9 @@ A Chip-8 emulator written to learn about instruction sets and computer architect
 - cpu execution: ~500hz
 
 ## Keyboard Layout
-1 2 3 4  
-
-Q W E R  
-
-A S D F  
-
+1 2 3 4  <br>
+Q W E R  <br>
+A S D F  <br>
 Z X C V  
 
 
