@@ -1,5 +1,5 @@
 # Chip-8 emulator
-a chip-8 emulator built to learn about instructions sets, and get a feel of computer architecture
+A Chip-8 emulator written to learn about instruction sets and computer architecture.
 
 playing tetris
 
