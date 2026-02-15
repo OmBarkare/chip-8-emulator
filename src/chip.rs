@@ -305,7 +305,7 @@ impl Chip {
             (0xF, _, 0x0, 0x7) => {
                 // LD Vx, DT load dt into Vx
                 self.rv[x as usize] = self.dt;
-                println!("dt: {}", self.dt);
+                // println!("dt: {}", self.dt);
             }
 
             (0xF, _, 0x0, 0xA) => {
